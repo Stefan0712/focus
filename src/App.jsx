@@ -1,7 +1,7 @@
 import './App.css';
-import FullScreenModal from './components/common/FullScreenModal/FullScreenModal';
-import MainPanel from './components/MainPanel/MainPanel';
-import Pomodoro from './components/Pomodoro/Pomodoro';
+import FullScreenModal from './components/common/FullScreenModal/FullScreenModal.jsx';
+import MainPanel from './components/MainPanel/MainPanel.jsx';
+import Pomodoro from './components/Pomodoro/Pomodoro.jsx';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toggleFullscreen } from './store/appSettingsSlice';

@@ -184,6 +184,7 @@ const Pomodoro = () => {
             longBreaks,
             breaks,
             focusSessions,
+            createdAt: new Date()
         };
         console.log(sessionLog)
         dispatch(addToHistory(sessionLog));

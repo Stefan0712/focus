@@ -37,7 +37,6 @@ const History = () => {
                                         <p className={styles.hour}>From {getHour(session.startTime)} to {getHour(session.finishTime)}</p>
                                         <p className={styles.duration}>{getDuration(session.startTime, session.finishTime)}</p>
                                         <p className={styles.sessions}>{session.focusSessions}/{session.breaks}/{session.longBreaks}</p>
-
                                     </div>
                                 ))}
                             </div>

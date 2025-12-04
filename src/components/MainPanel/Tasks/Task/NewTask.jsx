@@ -15,7 +15,7 @@ const NewTask = ({closeNewTask}) => {
 
     const handleNewTask = () =>{
         const taskId = uuidv4();
-        dispatch(addTask({id: taskId, title, priority}));
+        dispatch(addTask({id: taskId, title, priority, createdAt: new Date()}));
         closeNewTask();
     }
 
