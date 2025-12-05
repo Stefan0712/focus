@@ -29,52 +29,6 @@ const initialState = {
 
     },
     snapshot: null,
-    history: {
-        '2025-02-28' :[
-            {
-                "startTime": "2025-02-28T15:26:49.248Z",
-                "finishTime": "2025-02-28T15:27:04.763Z",
-                "totalTimeElapsed": 12,
-                "longBreaks": 0,
-                "breaks": 0,
-                "focusSessions": 1
-            },
-            {
-                "startTime": "2025-02-28T18:10:20.500Z",
-                "finishTime": "2025-02-28T18:45:32.123Z",
-                "totalTimeElapsed": 35,
-                "longBreaks": 0,
-                "breaks": 1,
-                "focusSessions": 2
-            }
-        ],
-        '2025-03-01' :[
-            {
-            "startTime": "2025-03-01T09:00:15.800Z",
-            "finishTime": "2025-03-01T09:45:45.987Z",
-            "totalTimeElapsed": 45,
-            "longBreaks": 1,
-            "breaks": 2,
-            "focusSessions": 3
-            }   
-        ],
-        '2025-03-02' :[{
-            "startTime": "2025-03-02T14:30:00.120Z",
-            "finishTime": "2025-03-02T15:20:45.500Z",
-            "totalTimeElapsed": 50,
-            "longBreaks": 0,
-            "breaks": 1,
-            "focusSessions": 2
-        }],
-        '2025-03-03' :[{
-            "startTime": "2025-03-03T21:10:35.600Z",
-            "finishTime": "2025-03-03T22:00:20.890Z",
-            "totalTimeElapsed": 50,
-            "longBreaks": 1,
-            "breaks": 2,
-            "focusSessions": 3
-        }]
-    },
     theme: 'dark-theme',
     isPomodoroMinimized: false,
     isTasksMaximized: false,
@@ -109,30 +63,11 @@ const appSettingsSlice = createSlice({
         setBreakSessions: (state, action)=>{
             state.breakSessions = action.payload;
         },
-        toggleSoundAlarm: (state)=>{
-            state.soundAlarm = !state.soundAlarm;
-        },
-        setSelectedProject: (state, action)=>{
-            state.selectedProject = action.payload;
-        },
         updatePomodoroSettings: (state, action)=>{
             state.pomodoroSettings = action.payload;
         },
         setSelectedTask: (state, action) =>{
             state.selectedTask = action.payload;
-        },
-        addToHistory: (state, action) => {
-            const todayDate = new Date().toISOString().split("T")[0];
-            // Ensure history object exists
-            if (!state.history) {
-                state.history = {};
-            }
-            // Ensure there's an array for today's date
-            if (!state.history[todayDate]) {
-                state.history[todayDate] = [];
-            }
-            // Append the new object
-            state.history[todayDate].push(action.payload);
         },
         toggleFullscreen: (state, action) =>{
             state.isFullscreen = action.payload
@@ -182,5 +117,5 @@ const appSettingsSlice = createSlice({
     }
 });
 
-export const { resetSnapshot, saveSnapshot, deleteSnapshot, toggleTheme, setTheme, setLanguage,updatePomodoroSetting, updateSetting, setFocusSessions, toggleScreenAwake, toggleFullscreen, setBreakSessions, toggleSoundAlarm, addToHistory, resetAppSettings,setSelectedProject, updatePomodoroSettings, setSelectedTask } = appSettingsSlice.actions;
+export const { resetSnapshot, saveSnapshot, deleteSnapshot, toggleTheme, setTheme, setLanguage,updatePomodoroSetting, updateSetting, setFocusSessions, toggleScreenAwake, toggleFullscreen, setBreakSessions, resetAppSettings, updatePomodoroSettings } = appSettingsSlice.actions;
 export default appSettingsSlice.reducer;

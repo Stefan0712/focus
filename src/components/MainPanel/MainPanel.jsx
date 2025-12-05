@@ -4,30 +4,23 @@ import Tasks from './Tasks/Tasks.jsx';
 import History from './History/History.jsx';
 import Settings from '../SideMenu/Settings/Settings.jsx';
 import { useSelector } from 'react-redux';
-import { enterFullScreen, exitFullScreen, isFullscreen } from '../../helpers';
 import { IconLibrary } from '../../IconLibrary';
+import Menu from './Menu/Menu.jsx';
 
 
 const MainPanel = () => {
-    const [selectedScreen, setSelectedScreen] = useState('home');
+    const [selectedScreen, setSelectedScreen] = useState('tasks');
     const isMinimized = useSelector(state=>state.appSettings.isPomodoroMinimized);
-    const settings = useSelector((state)=>state.appSettings);
     const [isPanelExpanded, setIsPanelExpanded] = useState(false);
     const [showMenu, setShowMenu] = useState(false);
 
 
     return ( 
-        <div className={`${styles.mainPanel} ${isMinimized ? styles['extended'] : ''} ${isPanelExpanded ? styles['hide-nav'] : ''}`}>
-            {showMenu ? <QuickMenu close={()=>setShowMenu(false)} hideNavigation={()=>setIsPanelExpanded(true)} /> : null}
-            <div className={`${styles.navigation} ${isPanelExpanded ? styles.hide : ''}`}>
-                <div className={styles.buttons}>
-                    <button onClick={()=>setSelectedScreen('tasks')} className={selectedScreen === "tasks" ? styles.selected : ''}>Tasks</button>
-                    <button onClick={()=>setSelectedScreen('history')} className={selectedScreen === "history" ? styles.selected : ''}>History</button>
-                    <button onClick={()=>setSelectedScreen('settings')} className={selectedScreen === "settings" ? styles.selected : ''}>Settings</button>
-                </div>
-                <button className={styles['menu-button']} onClick={()=>setShowMenu(prev=>!prev)}>
-                    <IconLibrary.Dots className='small-icon' />
-                </button> 
+        <div className={`${styles.mainPanel} ${isMinimized ? styles['extended'] : ''}`}>
+            {showMenu ? <Menu close={()=>setShowMenu(false)} selectScreen={(screen)=>setSelectedScreen(screen)} /> : null}
+            <div className={styles.appHeader}>
+                <button onClick={()=>setShowMenu(true)}><IconLibrary.Menu className="medium-icon"/></button>
+                <h3>{selectedScreen === "tasks" ? "Tasks" : selectedScreen === "history" ? "History" : selectedScreen === "settings" ? "Settings" : null}</h3>
             </div>
             <div className={styles.content}>
                 {isPanelExpanded ?
@@ -38,19 +31,8 @@ const MainPanel = () => {
                 {selectedScreen === "tasks" ? <Tasks /> : selectedScreen === "history" ? <History /> : selectedScreen === "settings" ? <Settings /> : <Tasks />}
             </div>
         </div>
-     );
+     ); 
 }
  
 export default MainPanel;
 
-const QuickMenu = ({close, hideNavigation}) => {
-
-    return (
-        <div className={styles.quickMenu}>
-            <button onClick={isFullscreen() ? exitFullScreen : enterFullScreen}>{isFullscreen() ? 'Disable ' : 'Enable '} Fullscreen</button>
-            <button>Minimize Timer</button>
-            <button onClick={hideNavigation}>Hide Navigation</button>
-            <button onClick={close}>Close</button>
-        </div>
-    )
-}

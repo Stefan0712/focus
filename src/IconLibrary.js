@@ -23,10 +23,8 @@ import Restore from './assets/icons/restore.svg?react';
 import Swap from './assets/icons/swap.svg?react';
 import Github from './assets/icons/github.svg?react';
 import Email from './assets/icons/email.svg?react';
-import Website from './assets/icons/website.svg?react';
-import Tiktok from './assets/icons/tiktok.svg?react';
-import Donate from './assets/icons/donate.svg?react';
-import Dots from './assets/icons/dots.svg?react'
+import Dots from './assets/icons/dots.svg?react';
+import Menu from './assets/icons/menu.svg?react';
 
 
 export const IconLibrary = {
@@ -56,7 +54,5 @@ export const IconLibrary = {
     Swap,
     Github,
     Email,
-    Website,
-    Tiktok,
-    Donate
+    Menu
 }
