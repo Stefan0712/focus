@@ -15,9 +15,6 @@ const PomodoroSettings = () => {
     }
     return ( 
         <div className={styles.settings}>
-                <div className={styles.header}>
-                    <h3>Pomodoro Settings</h3>
-                </div>
             <div className={styles['settings-container']}>
                 <div className={styles['setting']}>
                     <p>Duration of Focus Sessions: (min)</p>
