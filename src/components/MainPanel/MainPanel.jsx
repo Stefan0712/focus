@@ -6,6 +6,7 @@ import Settings from '../SideMenu/Settings/Settings.jsx';
 import { useSelector } from 'react-redux';
 import { IconLibrary } from '../../IconLibrary';
 import Menu from './Menu/Menu.jsx';
+import PomodoroSettings from '../Pomodoro/PomodoroSettings.jsx';
 
 
 const MainPanel = () => {
@@ -20,7 +21,7 @@ const MainPanel = () => {
             {showMenu ? <Menu close={()=>setShowMenu(false)} selectScreen={(screen)=>setSelectedScreen(screen)} /> : null}
             <div className={styles.appHeader}>
                 <button onClick={()=>setShowMenu(true)}><IconLibrary.Menu className="medium-icon"/></button>
-                <h3>{selectedScreen === "tasks" ? "Tasks" : selectedScreen === "history" ? "History" : selectedScreen === "settings" ? "Settings" : null}</h3>
+                <h3>{selectedScreen === "tasks" ? "Tasks" : selectedScreen === "history" ? "History" : selectedScreen === "settings" ? "Settings" : selectedScreen === "pomodoro-settings" ? " Pomodoro Settings" : null}</h3>
             </div>
             <div className={styles.content}>
                 {isPanelExpanded ?
@@ -28,7 +29,7 @@ const MainPanel = () => {
                         <IconLibrary.Minimize className='small-icon' />
                     </button> 
                 : null} 
-                {selectedScreen === "tasks" ? <Tasks /> : selectedScreen === "history" ? <History /> : selectedScreen === "settings" ? <Settings /> : <Tasks />}
+                {selectedScreen === "tasks" ? <Tasks /> : selectedScreen === "history" ? <History /> : selectedScreen === "settings" ? <Settings /> : selectedScreen==="pomodoro-settings" ? <PomodoroSettings /> : <Tasks />}
             </div>
         </div>
      ); 

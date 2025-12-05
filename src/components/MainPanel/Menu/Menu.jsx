@@ -35,7 +35,7 @@ const Menu = ({close, selectScreen}) => {
             <button className={styles.menuBtn} onClick={()=>navigateTo('tasks')}>Tasks</button>
             <button className={styles.menuBtn} onClick={()=>navigateTo('history')}>History</button>
             <button className={styles.menuBtn} onClick={()=>navigateTo('settings')}>App Settings</button>
-            <button className={styles.menuBtn}>Timer Settings</button>
+            <button className={styles.menuBtn} onClick={()=>navigateTo('pomodoro-settings')}>Timer Settings</button>
             <div className={styles.quickSettings}>
                 <div className={styles.setting}>
                     <b>Toggle Fullscreen</b>

@@ -2,7 +2,6 @@ import { createSlice } from '@reduxjs/toolkit';
 
 // Default settings
 const initialState = {
-    theme: 'dark',
     language: 'en',
     selectedProject: null,
     selectedTask: null,
@@ -66,14 +65,15 @@ const appSettingsSlice = createSlice({
         updatePomodoroSettings: (state, action)=>{
             state.pomodoroSettings = action.payload;
         },
-        setSelectedTask: (state, action) =>{
-            state.selectedTask = action.payload;
-        },
         toggleFullscreen: (state, action) =>{
             state.isFullscreen = action.payload
         },
         toggleScreenAwake: (state, action) =>{
             state.isScreenAwakeOn = action.payload
+        },
+        setSetting: (state, action) => {
+            const { property, value } = action.payload;
+            state.pomodoroSettings[property] = value; 
         },
         updateSetting: (state, action) =>{
             
@@ -117,5 +117,5 @@ const appSettingsSlice = createSlice({
     }
 });
 
-export const { resetSnapshot, saveSnapshot, deleteSnapshot, toggleTheme, setTheme, setLanguage,updatePomodoroSetting, updateSetting, setFocusSessions, toggleScreenAwake, toggleFullscreen, setBreakSessions, resetAppSettings, updatePomodoroSettings } = appSettingsSlice.actions;
+export const { resetSnapshot, saveSnapshot, setSetting, deleteSnapshot, toggleTheme, setTheme, setLanguage,updatePomodoroSetting, updateSetting, setFocusSessions, toggleScreenAwake, toggleFullscreen, setBreakSessions, resetAppSettings, updatePomodoroSettings } = appSettingsSlice.actions;
 export default appSettingsSlice.reducer;
