@@ -49,7 +49,7 @@ const MessageModal = ({data, closeModal}) => {
             <div style={modalContent}>
                 <p>{data.msg}</p>
             </div>
-            <button style={modalButton} onClick={closeModal}><img style={modalIcon} src={IconLibrary.Close} alt='close message modal' /></button>
+            <button style={modalButton} onClick={closeModal}><IconLibrary.Close style={modalIcon} /></button>
         </div>
      );
 }

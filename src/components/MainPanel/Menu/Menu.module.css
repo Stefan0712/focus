@@ -29,10 +29,9 @@
     grid-template-columns: 1fr 40px;
     gap: 10px;
     align-items: center;
-    color: var(--bg-color);
 }
 .menuHeader h2{
-    color: var(--bg-color);
+    color: var(--text-color);
 }
 .menuHeader svg {
     height: 25px;
@@ -52,7 +51,7 @@
     border: none;
     border-bottom: 1px solid var(--general-border-color);
     text-align: start;
-    color: var(--bg-color);
+    color: var(--text-color);
 }
 .quickSettings {
     display: flex;
@@ -65,8 +64,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    color: var(--bg-color);
 }
 .setting b {
-    color: var(--bg-color);
+    color: var(--text-color);
 }
