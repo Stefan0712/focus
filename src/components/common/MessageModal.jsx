@@ -4,17 +4,16 @@ import { useEffect } from 'react';
 
 const MessageModal = ({data, closeModal}) => {
     const messageModal = {
-        width: 'calc(100% - 20px)',
+        width: '100dvw',
         minHeight: '50px',
         maxHeight: '100px',
         gap: '10px',
         display: 'flex',
         position: 'absolute',
-        top: '10px',
-        left: '10px',
+        top: '0px',
+        left: '0px',
         zIndex: '60',
         backgroundColor: data.type === 'success' ? '#4CAF50' : data.type === 'info' ? 'var(--secondary-color)' : '#E53935',
-        borderRadius: '10px',
         padding: '10px 5px'
     };
 
