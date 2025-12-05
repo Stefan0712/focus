@@ -69,8 +69,8 @@ const Settings = () => {
                     <button onClick={()=>setConfirmDelete('settings')}>Settings</button>
                     {confirmDelete === 'settings' ? 
                     <div className={styles['confirm-delete-buttons']}>
-                        <button onClick={()=>handleDelete('settings')}><img className={'small-icon'} src={IconLibrary.Checkmark} alt='confirm delete'></img></button>
-                        <button onClick={()=>setConfirmDelete(null)}><img className={'small-icon'} src={IconLibrary.Close} alt='cancel delete'></img></button>
+                        <button onClick={()=>handleDelete('settings')}><IconLibrary.Checkmark className={'medium-icon'} /></button>
+                        <button onClick={()=>setConfirmDelete(null)}><IconLibrary.Close className={'medium-icon'} /></button>
                     </div>
                     : null}
                 </div>
@@ -78,8 +78,8 @@ const Settings = () => {
                     <button onClick={()=>setConfirmDelete('tasks')}>Tasks</button>
                     {confirmDelete === 'tasks' ? 
                     <div className={styles['confirm-delete-buttons']}>
-                        <button onClick={()=>handleDelete('tasks')}><img className={'small-icon'} src={IconLibrary.Checkmark} alt='confirm delete'></img></button>
-                        <button onClick={()=>setConfirmDelete(null)}><img className={'small-icon'} src={IconLibrary.Close} alt='cancel delete'></img></button>
+                        <button onClick={()=>handleDelete('tasks')}><IconLibrary.Checkmark className={'medium-icon'} /></button>
+                        <button onClick={()=>setConfirmDelete(null)}><IconLibrary.Close className={'medium-icon'} /></button>
                     </div>
                     : null}
                 </div>
