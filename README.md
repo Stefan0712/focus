@@ -1,39 +1,36 @@
 # ⏱️ Get It Done
 
-Forget all those complex to-do apps or pomodoro timers with ads. This simple app is meant to boost your productivity by making you interact the least amount of time with your productivity app. Why waste time with a complex app where you have to press tens of buttons to get something done instead of focusing on your work? 
+## 🧐 The Why
+Most productivity apps are productivity traps—too many buttons, ads, and complex settings. Get It Done was built with one philosophy: Friction Reduction. It combines a Pomodoro timer with a prioritized task list in a single view, allowing you to manage your work without breaking your focus. I bulit it to fix one of my biggest issues when working: planning. Instead of spending hours of creating tasks, grouping them, adding tags, deadlines, etc, I just add tasks I want to do this session and hit start on the timer.
 
-This app is simple. You launch it, you create your project, add tasks and get to work. No planning a month in advance, no spending more time on planning the task than actually doing it, no complex interface. You add the title of the task, the priority, and the optional due date and you're set to go. Start the timer and check your tasks one by one until you are done!
+## ⚡ Key Features
+### 🎯 Focus-First Architecture
+Integrated Workflow: Add, edit, and complete tasks while the timer is running. No context switching.
+Persistent History: Uses Dexie.js to log every session locally, visualizing your productivity trends over time.
+Customize: Pick one of the 5 theme available and choose what you want to see on your timer
+No overplanning: One list for all your tasks, ordered by priority and the order they were added. Spend your time on completing the tasks, not planning them
 
-## 📋 Features
 
-1. Clean and simple interface
-2. Everything at a glance
-3. Simple and always visible Pomodoro timer
-4. No learning curve - just do your tasks
-5. Everything in under 2 clicks/taps
+## 🛠️ Tech Stack
+Frontend: React.js
+State Management: Redux Toolkit (handling timer logic & UI state)
+Database: Dexie.js (IndexedDB wrapper for offline storage)
+Styling: CSS Modules / Styled Components for storing tasks and logs
 
-## 🚀 What can it do?
+## 🚀 How to Run Locally
 
-The core idea is that it's a small and simple app that should improve producivity by reducing the time to manage tasks. With that in mind, it doesn't do much.
-You can create projects that are just a way to group tasks in a simple way. Each task can have an unlimited number of tasks, which are created with only a title, due date and due hour,
-priority, and if that task should be pinned or not. That's all. The only required input is the title, everything else being optional or already having a default item. You can edit, pin, complete, or delete a task. 
-
-Your screen will be split in two, on the left being the main panel with tasks, history, or home, and on the right being the pomodoro timer that is always shown. You can customize the duration of the focus session, of the short breaks, long breaks, the frequency of long breaks, if you want to include them, and notifications.
-
-## ⚙️ How does it work?
-
-It's just a simple React app that has three main components: the side panel, the main panel, and the Pomodoro timer.
-
-The Side Panel contains a Work Board with all projects and three buttons, one for creating a new project, one for showing settings, and one for maximizing/minimizing the side menu.
-
-The Main Panel contains the Home page, with current date and time, tasks that are due today, and a goal tracker of how many tasks you completed each day in the current week.
-The Tasks page contains all tasks of the selected project. They are grouped into three categories: Pinned, Not Completed, and Completed. You can colapse/expand them as you wish. From the same page you can edit, delete, complete, or pin them.
-The History page contains all logged Work Sessions. A work session is the total of all focus sessions and breaks. Each log contains the number of each session, when you started and when you finished.
-
-The Pomodoro timer component contains a simple coundown that you can start, stop, or reset. It also handles different sessions (focus sessions, breaks and long breaks). It changes the duration based on them and let you skip them or reset them. All of those settings can be customized to fit you.
-
-The app only uses React and Redux (with persist so data stay saved even after closing the app). It can prompt the user to switch to fullscreen for best experience and show different messages.
-
+1. Clone this repo
+```bash
+https://github.com/Stefan0712/get-it-done.git
+```
+2. Install dependencies
+```bash
+npm install
+```
+3. Start the app
+```bash
+npm run dev
+```
 
 ## 🤝 Contributing
 
