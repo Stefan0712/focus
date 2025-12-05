@@ -1,152 +1,88 @@
 import { useState, useEffect } from 'react';
-
 import { IconLibrary } from '../../../IconLibrary';
-
-import NewTask from './Task/NewTask';
 import styles from './Tasks.module.css';
 import Task from './Task/Task';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
+import { v4 as uuidv4 } from 'uuid';
+import { db } from '../../../db';
 
-import { deleteTask, restoreTask, togglePin } from '../../../store/tasksSlice';
-import { setSelectedTask } from '../../../store/appSettingsSlice';
-
-import EditTask from './EditTask';
 
 
 
 const Tasks = () => {
 
-    const dispatch = useDispatch();
 
-
-    const tasks = useSelector(state=>state.tasks.tasks)
-    const selectedTask = useSelector(state=>state.appSettings.selectedTask);
-    const deletedTasks = useSelector(state=>state.tasks.deleted);
 
     const isMaximized = useSelector(state=>state.appSettings.isPomodoroMinimized);
 
-    const [showNewTask, setShowNewTask] = useState(false);
-    const [showEditTask, setShowEditTask] = useState(null);
+
+    const [tasks, setTasks] = useState([]);
     const [filteredTasks, setFilteredTasks] = useState([]); 
 
     const [selectedCategory, setSelectedCategory] = useState('all');
+    const [showDeleted, setShowDeleted] = useState(false);
+    const [showCompleted, setShowCompleted] = useState(false);
 
 
 
 
-
-
-    useEffect(() => {
-        dispatch(setSelectedTask(null));  // Reset selected task
-    
-        if (!tasks || tasks.length === 0) {
-            console.log('No tasks available');
-            setFilteredTasks([]);  // Ensure state is cleared
-            return;
+    const getTasks = async () =>{
+        try{
+            const response = await db.tasks.toArray();
+            if(response && response.length > 0){
+                setTasks(response)
+            }
+        } catch (error) {
+            console.error(error);
         }
+    }
+    useEffect(()=>{getTasks()},[]);
     
-        // Create a new array before sorting to avoid mutating Redux state
-        const sortedTasks = [...tasks].sort((a, b) => {
-            if (a.isPinned && !b.isPinned) return -1;  // Pinned first
-            if (!a.isPinned && b.isPinned) return 1;
-            if (!a.isCompleted && b.isCompleted) return -1;  // Not completed before completed
-            if (a.isCompleted && !b.isCompleted) return 1;
-            return 0;
-        });
-    
-        setFilteredTasks(sortedTasks);
-    }, [tasks, dispatch]);
-    
-    const changeCategory = (category) => {
-        if (!tasks) {
-            setFilteredTasks([]);
-            return;
+    const addNewTask = () => {
+        const newTask = {
+            id: uuidv4(),
+            createdAt: new Date(),
+            isCompleted: false,
+            priority: 'normal',
+            title: '',
+            editMode: true,
+            isPinned: false,
+            isDeleted: false
         }
-        dispatch(setSelectedTask(null));
-        switch (category) {
-            case 'all':
-                setFilteredTasks([...tasks]);
-                setSelectedCategory('all');
-                break;
-            case 'completed':
-                setFilteredTasks(tasks.filter(item => item.isCompleted && !item.isPinned));
-                setSelectedCategory('completed');
-                break;
-            case 'not-completed':
-                setFilteredTasks(tasks.filter(item => !item.isCompleted && !item.isPinned));
-                setSelectedCategory('not-completed');
-                break;
-            case 'pinned':
-                setFilteredTasks(tasks.filter(item => item.isPinned));
-                setSelectedCategory('pinned');
-                break;
-            case 'deleted':
-                setFilteredTasks(deletedTasks || []);
-                setSelectedCategory('deleted');
-                break;
-            default:
-                setFilteredTasks([...tasks]);
-                setSelectedCategory('all');
-                break;
-        }
+        setTasks(prev=>[...prev, newTask]);
     };
-    const handleSelectTask = (id)=>{
-        dispatch(setSelectedTask(id));
-    }
-    const handleDeleteTask = () =>{
-        dispatch(deleteTask(selectedTask));
-        dispatch(setSelectedTask(null));
-    }
-    const handleRestoreTask = () =>{
-        dispatch(restoreTask(selectedTask));
-        dispatch(setSelectedTask(null));
-        setSelectedCategory('all');
-    }
-    const handlePinTask = () =>{
-        dispatch(togglePin(selectedTask));
-        dispatch(setSelectedTask(null));
-    }
-    const handleEditTask = () =>{
-        setShowEditTask(selectedTask);
-    }
+
+
+   const handleUpdate = (item) => {
+        setTasks(prev => {
+            const exists = prev.some(i => i.id === item.id);
+            if (exists) {
+                return prev.map(i => i.id === item.id ? item : i);
+            } else {
+                return [...prev, item];
+            }
+        });
+    };
+
     return ( 
-        <div className={`${styles.tasks} ${isMaximized ? styles['extended-tasks'] : ''}`}>
-            
-            {showNewTask ? <NewTask closeNewTask={()=>setShowNewTask(false)} /> : null}
-            {showEditTask ? <EditTask closeEditTask={()=>setShowEditTask(false)} taskId={showEditTask} /> : null}
-  
+        <div className={`${styles.tasks} ${isMaximized ? styles['extended-tasks'] : ''}`}>  
             <div className={`${styles.header} `}>
-                <select className={styles.category} onChange={(e)=>changeCategory(e.target.value)} value={selectedCategory}> 
-                    <option value={'all'}>All</option>
-                    <option value={'not-completed'}>Not Completed</option>
-                    <option value={'pinned'}>Pinned</option>
-                    <option value={'completed'}>Completed</option>
-                    <option value={'deleted'}>Deleted</option>
-                </select>      
-                {selectedTask && selectedCategory !== 'deleted' ? (
-                    <div className={styles['task-buttons']}>
-                        <button onClick={handleEditTask}><img className='small-icon' src={IconLibrary.Edit} alt='edit selected task'></img></button>
-                        <button onClick={handlePinTask}><img className='small-icon' src={tasks.some(item=>item.id === selectedTask && item.isPinned) ? IconLibrary.Unpin : IconLibrary.Pin} alt='pin selected task'></img></button>
-                        <button onClick={handleDeleteTask}><img className='small-icon' src={IconLibrary.Delete} alt='delete selected task'></img></button>
-                    </div>
-                ) : 
-                selectedTask && selectedCategory === 'deleted' ? (
-                    <div className={styles['task-buttons']}>
-                        <button onClick={handleRestoreTask}><img className='small-icon' src={IconLibrary.Restore} alt='Restore selected deleted task'></img></button>
-                    </div>
-                 ) : null}
-                <button onClick={()=>setShowNewTask(true)}>
-                    <img className='small-icon' src={IconLibrary.Plus} alt='open new project'></img>
+                <div className={styles.categories}>
+                    <button className={selectedCategory === "all" ? styles.selectedCategory : ''} onClick={()=>setSelectedCategory('all')}>All</button>
+                    <button className={selectedCategory === "not-completed" ? styles.selectedCategory : ''} onClick={()=>setSelectedCategory('not-completed')}>Not Completed</button>
+                    <button className={selectedCategory === "pinned" ? styles.selectedCategory : ''} onClick={()=>setSelectedCategory('pinned')}>Pinned</button>
+                </div>
+                <button className={styles.newTaskButton} onClick={addNewTask}>
+                    <IconLibrary.Plus className='small-icon'/>
                 </button>
             </div>
             <div className={styles.container}>
-                {filteredTasks && filteredTasks.length > 0 ? 
-                    filteredTasks?.map((task, index)=>(<Task data={task} key={index} isSelected={task.id === selectedTask} selectTask={handleSelectTask}  />))
-                : null}
+                {tasks && tasks.length > 0 ? 
+                    tasks?.map(task=>(<Task data={task} key={task.id} handleUpdate={handleUpdate} />))
+                : <p>No tasks</p>}
             </div>
-            
         </div>
-        );
+    );
    
 }
  

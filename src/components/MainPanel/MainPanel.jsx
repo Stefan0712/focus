@@ -13,30 +13,28 @@ const MainPanel = () => {
     const isMinimized = useSelector(state=>state.appSettings.isPomodoroMinimized);
     const settings = useSelector((state)=>state.appSettings);
     const [isPanelExpanded, setIsPanelExpanded] = useState(false);
+    const [showMenu, setShowMenu] = useState(false);
 
 
     return ( 
         <div className={`${styles.mainPanel} ${isMinimized ? styles['extended'] : ''} ${isPanelExpanded ? styles['hide-nav'] : ''}`}>
+            {showMenu ? <QuickMenu close={()=>setShowMenu(false)} hideNavigation={()=>setIsPanelExpanded(true)} /> : null}
             <div className={`${styles.navigation} ${isPanelExpanded ? styles.hide : ''}`}>
-                {settings.showFullscreenButton && window.innerWidth < 1000  ? <button className={styles['fullscreen-button']} onClick={isFullscreen() ? exitFullScreen : enterFullScreen} >
-                    <img className='small-icon' src={isFullscreen() ? IconLibrary.DisableFullscreen : IconLibrary.EnableFullscreen} alt='enable fullscreen' /></button> : null}
                 <div className={styles.buttons}>
                     <button onClick={()=>setSelectedScreen('tasks')} className={selectedScreen === "tasks" ? styles.selected : ''}>Tasks</button>
-                    {settings.showHistoryButton ? (<button onClick={()=>setSelectedScreen('history')} className={selectedScreen === "history" ? styles.selected : ''}>History</button>) : null}
+                    <button onClick={()=>setSelectedScreen('history')} className={selectedScreen === "history" ? styles.selected : ''}>History</button>
                     <button onClick={()=>setSelectedScreen('settings')} className={selectedScreen === "settings" ? styles.selected : ''}>Settings</button>
                 </div>
-                   {settings.showMaximizeButton ? (
-                    <button className={styles['maximize-panel-button']} onClick={()=>setIsPanelExpanded(true)}>
-                        <img className='small-icon' src={IconLibrary.Maximize} alt='toggle panel maximize'></img>
-                    </button> 
-                   ) : null}
+                <button className={styles['menu-button']} onClick={()=>setShowMenu(prev=>!prev)}>
+                    <IconLibrary.Dots className='small-icon' />
+                </button> 
             </div>
             <div className={styles.content}>
-                    {isPanelExpanded ?
-                        <button className={styles['minimize-panel-button']} onClick={()=>setIsPanelExpanded(false)}>
-                            <img className='small-icon' src={IconLibrary.Minimize} alt='minimize panel'></img>
-                        </button> 
-                    : null} 
+                {isPanelExpanded ?
+                    <button className={styles['minimize-panel-button']} onClick={()=>setIsPanelExpanded(false)}>
+                        <IconLibrary.Minimize className='small-icon' />
+                    </button> 
+                : null} 
                 {selectedScreen === "tasks" ? <Tasks /> : selectedScreen === "history" ? <History /> : selectedScreen === "settings" ? <Settings /> : <Tasks />}
             </div>
         </div>
@@ -44,3 +42,15 @@ const MainPanel = () => {
 }
  
 export default MainPanel;
+
+const QuickMenu = ({close, hideNavigation}) => {
+
+    return (
+        <div className={styles.quickMenu}>
+            <button onClick={isFullscreen() ? exitFullScreen : enterFullScreen}>{isFullscreen() ? 'Disable ' : 'Enable '} Fullscreen</button>
+            <button>Minimize Timer</button>
+            <button onClick={hideNavigation}>Hide Navigation</button>
+            <button onClick={close}>Close</button>
+        </div>
+    )
+}

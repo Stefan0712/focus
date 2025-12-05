@@ -1,34 +1,36 @@
-import Checkmark from './assets/icons/checkmark.svg';
-import Close from './assets/icons/close.svg';
-import ExpandLeft from './assets/icons/expand-left.svg';
-import ExpandRight from './assets/icons/expand-right.svg';
-import Finish from './assets/icons/finish.svg';
-import Pause from './assets/icons/pause.svg';
-import Plus from './assets/icons/plus.svg';
-import PlusCircle from './assets/icons/plus-circle.svg';
-import Restart from './assets/icons/restart.svg';
-import Settings from './assets/icons/settings.svg';
-import Start from './assets/icons/start.svg';
-import Delete from './assets/icons/delete.svg';
-import Save from './assets/icons/save.svg';
-import Pin from './assets/icons/pin.svg';
-import Next from './assets/icons/next.svg';
-import EnableFullscreen from './assets/icons/enableFullscreen.svg';
-import DisableFullscreen from './assets/icons/disableFullscreen.svg';
-import Unpin from './assets/icons/unpin.svg';
-import Edit from './assets/icons/edit.svg';
-import Minimize from './assets/icons/minimize.svg';
-import Maximize from './assets/icons/maximize.svg';
-import Restore from './assets/icons/restore.svg';
-import Swap from './assets/icons/swap.svg';
-import Github from './assets/icons/github.svg';
-import Email from './assets/icons/email.svg';
-import Website from './assets/icons/website.svg';
-import Tiktok from './assets/icons/tiktok.svg';
-import Donate from './assets/icons/donate.svg';
+import Checkmark from './assets/icons/checkmark.svg?react';
+import Close from './assets/icons/close.svg?react';
+import ExpandLeft from './assets/icons/expand-left.svg?react';
+import ExpandRight from './assets/icons/expand-right.svg?react';
+import Finish from './assets/icons/finish.svg?react';
+import Pause from './assets/icons/pause.svg?react';
+import Plus from './assets/icons/plus.svg?react';
+import PlusCircle from './assets/icons/plus-circle.svg?react';
+import Restart from './assets/icons/restart.svg?react';
+import Settings from './assets/icons/settings.svg?react';
+import Start from './assets/icons/start.svg?react';
+import Delete from './assets/icons/delete.svg?react';
+import Save from './assets/icons/save.svg?react';
+import Pin from './assets/icons/pin.svg?react';
+import Next from './assets/icons/next.svg?react';
+import EnableFullscreen from './assets/icons/enableFullscreen.svg?react';
+import DisableFullscreen from './assets/icons/disableFullscreen.svg?react';
+import Unpin from './assets/icons/unpin.svg?react';
+import Edit from './assets/icons/edit.svg?react';
+import Minimize from './assets/icons/minimize.svg?react';
+import Maximize from './assets/icons/maximize.svg?react';
+import Restore from './assets/icons/restore.svg?react';
+import Swap from './assets/icons/swap.svg?react';
+import Github from './assets/icons/github.svg?react';
+import Email from './assets/icons/email.svg?react';
+import Website from './assets/icons/website.svg?react';
+import Tiktok from './assets/icons/tiktok.svg?react';
+import Donate from './assets/icons/donate.svg?react';
+import Dots from './assets/icons/dots.svg?react'
 
 
 export const IconLibrary = {
+    Dots,
     Checkmark,
     Close,
     ExpandLeft,

@@ -1,8 +1,8 @@
-import Dexie from 'dexie';
+import Dexie from "dexie";
 
 export const db = new Dexie('MyTaskDatabase');
 
-db.version(1).stores({
-  tasks: '++id, title, isDone, createdAt, isCompleted',
+db.version(2).stores({
+  tasks: 'id, title, createdAt, isCompleted',
   log: 'createdAt'
 });

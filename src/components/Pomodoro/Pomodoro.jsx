@@ -5,8 +5,7 @@ import PomodoroSettings from './PomodoroSettings';
 import { useSelector, useDispatch } from 'react-redux';
 import { addToHistory, deleteSnapshot, saveSnapshot, updateSetting,  } from '../../store/appSettingsSlice';
 import MessageModal from '../common/MessageModal';
-import {formatDate, formatTime} from '../../helpers';
-import { v4 as uuid } from 'uuid';
+import {formatTime} from '../../helpers';
 
 const Pomodoro = () => {
     const [showSettings, setShowSettings] = useState(false); 
@@ -293,17 +292,17 @@ const Pomodoro = () => {
                 {showSettings && totalTimeElapsed === 0 ? <PomodoroSettings closeSettings={() => setShowSettings(false)} /> : null}
                 {snapshot && totalTimeElapsed < 1 ? <div className={styles.snapshot}>
                     <p>Restore last session?</p>
-                    <button onClick={handleRestoreSnapshot}><img className='small-icon' src={IconLibrary.Checkmark} alt="" /></button>
-                    <button onClick={handleDeleteSnapshot}><img className='small-icon' src={IconLibrary.Close} alt="" /></button>
+                    <button onClick={handleRestoreSnapshot}><IconLibrary.Checkmark className='small-icon' /></button>
+                    <button onClick={handleDeleteSnapshot}><IconLibrary.Close className='small-icon' /></button>
                 </div>  : null}
                
                 <div className={styles.timer}>
                     <button className={styles['settings-button']} onClick={enableSettings}>
-                        <img className='medium-icon' src={IconLibrary.Settings} alt="Settings" />
+                        <IconLibrary.Settings className='medium-icon' />
                     </button>
                     {settings.showMinimizeButton ? (
                         <button className={styles['minimize-button']} onClick={()=>handleMinimizeTimer()} >
-                            <img className='medium-icon' src={IconLibrary.Minimize} alt="minimize pomodoro" />
+                            <IconLibrary.Minimize className='medium-icon' />
                         </button>
                     ) : null}
                     <div className={`${styles['timer-background']} ${isSessionFinished && settings.sessionEndAnimation ? styles['animated-session-end'] : ''}`} style={settings.showTimerRing ? {background: `conic-gradient(var(--accent-color) ${percentageElapsed()}%, var(--timer-border-color) ${percentageElapsed()}% 100%)`} : {background: 'transparent'}}>
@@ -327,23 +326,23 @@ const Pomodoro = () => {
                                 <div className={`${styles.buttons} ${areButtonsHidden ? styles['minimized-buttons'] : ''}`} >
                                     <div className={`${styles['buttons-container']} ${areButtonsHidden ? 'hide' : ''}`}>
                                         <button onClick={resetTimer}>
-                                            <img className='medium-icon' src={IconLibrary.Restart} alt="Restart" />
+                                            <IconLibrary.Restart className='medium-icon' />
                                         </button>
                                         <button onClick={skipSession}>
-                                            <img className='medium-icon' src={IconLibrary.Next} alt="Skip" />
+                                            <IconLibrary.Next className='medium-icon' />
                                         </button>
                                         <button onClick={isRunning ? pauseTimer : startTimer}>
-                                            <img className='medium-icon' src={isRunning ? IconLibrary.Pause : IconLibrary.Start} alt="Pause/Play" />
+                                            {isRunning ? <IconLibrary.Pause className='medium-icon' /> : <IconLibrary.Start className='medium-icon' />}
                                         </button>
                                         <button onClick={handleFinish}>
-                                            <img className='medium-icon' src={IconLibrary.Finish} alt="Finish" />
+                                            <IconLibrary.Finish className='medium-icon'  />
                                         </button>
                                         <button onClick={()=>setAreButtonsHidden(true)}>
-                                            <img className='small-icon' src={IconLibrary.ExpandRight} style={{transform: 'rotateZ(90deg)'}} alt='hide timer buttons'></img>
+                                            <IconLibrary.ExpandRight className='small-icon' style={{transform: 'rotateZ(90deg)'}} alt='hide timer buttons' />
                                         </button>
                                     </div>
                                     <button className={`${styles['expand-buttons-button']} ${areButtonsHidden ? '' : 'hide'}`} onClick={()=>setAreButtonsHidden(false)}>
-                                        <img className='icon' src={IconLibrary.ExpandRight} style={{transform: 'rotateZ(-90deg)'}} alt='show timer buttons' />
+                                        <IconLibrary.ExpandRight className='icon' style={{transform: 'rotateZ(-90deg)'}} alt='show timer buttons' />
                                     </button>
                                 </div>
                             ) : null}
@@ -361,7 +360,7 @@ const Pomodoro = () => {
         return (
             <div className={styles['minimized-pomodoro']} style={settings.showMinimizedTimerProgress ? { '--progress': `${percentageElapsed()}%`,} : {background: 'transparent'}}>
                 <button className={styles['maximize-button']} onClick={handleMaximizeTimer}>
-                    <img className='medium-icon' src={IconLibrary.Maximize} alt="enable pomodoro" />
+                    <IconLibrary.Maximize className='medium-icon' />
                 </button>
                 <div className={styles.info}>
                     <div className={`${styles.time} ${isSessionFinished ? styles.isFinished : ''}`}>
@@ -371,16 +370,16 @@ const Pomodoro = () => {
 
                 <div className={styles.minimizedButtons}>
                     <button onClick={resetTimer}>
-                        <img className='medium-icon' src={IconLibrary.Restart} alt="Restart" />
+                        <IconLibrary.Restart className='medium-icon'  />
                     </button>
                     <button onClick={skipSession}>
-                        <img className='medium-icon' src={IconLibrary.Next} alt="Skip" />
+                        <IconLibrary.Next className='medium-icon' />
                     </button>
                     <button onClick={isRunning ? pauseTimer : startTimer}>
-                        <img className='medium-icon' src={isRunning ? IconLibrary.Pause : IconLibrary.Start} alt="Pause/Play" />
+                        {isRunning ? <IconLibrary.Pause className='medium-icon' /> : <IconLibrary.Start className='medium-icon' />}
                     </button>
                     <button onClick={handleFinish}>
-                        <img className='medium-icon' src={IconLibrary.Finish} alt="Finish" />
+                        <IconLibrary.Finish className='medium-icon'  />
                     </button>
                 </div>
         </div>
