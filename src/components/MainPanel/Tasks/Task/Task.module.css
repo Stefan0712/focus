@@ -17,6 +17,15 @@
     transition: all 0.1s;
     padding: 0 10px;
 }
+.checkedButton {
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    width: 40px;
+    border: none;
+}
 .task .buttons {
     height: 40px;
     width: 100%;

@@ -8,19 +8,15 @@ const Task = ({data, handleUpdate}) => {
     const [expandTask, setExpandTask] = useState(false);
     const [editMode, setEditMode] = useState(data.editMode ?? false);
 
+    // Used for editing a task
     const [title, setTitle] = useState(data.title ?? 'No title')
     const [priority, setPriority] = useState(data.priority ?? 'normal')
 
-    const saveUpdate = async () => {
+    const saveUpdate = async (updates) => {
+        console.log(updates)
         try {
-            const updatedItem = {
-                ...data,
-                title,
-                priority,
-                editMode: false
-            }
-            await db.tasks.update(updatedItem.id, updatedItem);
-            handleUpdate(updatedItem);
+            await db.tasks.update(data.id, {...updates});
+            handleUpdate({...data, ...updates});
             setEditMode(false);
         } catch (error) {
             console.error(error);
@@ -37,21 +33,21 @@ const Task = ({data, handleUpdate}) => {
                         <option value={'normal'}>Normal</option>
                         <option value={'high'}>High</option>
                     </select>
-                    <button className={styles.confirmEdit} onClick={saveUpdate}><IconLibrary.Checkmark className="medium-icon" /></button>
+                    <button className={styles.confirmEdit} onClick={()=>saveUpdate({title, priority, editMode: false})}><IconLibrary.Checkmark className="medium-icon" /></button>
                 </div> :
-                <div className={styles.main} onClick={()=>setExpandTask(prev=>!prev)}>
-                    <h4 style={data.isCompleted ? {textDecoration: 'line-through'} : null}>{data.title}</h4>
-                    {data.isPinned ? <IconLibrary.Pin className={`${styles['task-pin-icon']}`} /> : null}
+                <div className={styles.main}>
+                    <h4 style={data.isCompleted ? {textDecoration: 'line-through'} : null}  onClick={()=>setExpandTask(prev=>!prev)}>{data.title}</h4>
+                    {data.isPinned ? <IconLibrary.Pin className={`${styles['task-pin-icon']}`} /> : <div />}
                     {data.isCompleted ? 
-                        <button onClick={()=>handleUpdate({...data, isCompleted: !data.isCompleted})}><IconLibrary.Checkmark className='small-icon' /></button> : 
+                        <button className={styles.checkedButton} onClick={()=>handleUpdate({...data, isCompleted: !data.isCompleted})}><IconLibrary.Checkmark className='small-icon' /></button> : 
                         <input type='checkbox' onChange={()=>handleUpdate({...data, isCompleted: !data.isCompleted})} checked={data.isCompleted}></input>
                     }
                 </div>
             }   
             { expandTask && !editMode ? 
                 <div className={styles.buttons}>
-                    <button onClick={()=>handleUpdate({...data, isPinned: !data.isCompleted})}><IconLibrary.Pin className="medium-icon" /> {data.isPinned ? 'Unpin' : 'Pin'}</button>
-                    <button onClick={()=>handleUpdate({...data, isDeleted: !data.isDeleted})}>{data.isDeleted ? <><IconLibrary.Delete className="medium-icon" />  Restore</> : <><IconLibrary.Delete className="medium-icon" /> Delete</> }</button>
+                    <button onClick={()=>saveUpdate({isPinned: !data.isPinned})}><IconLibrary.Pin className="medium-icon" /> {data.isPinned ? 'Unpin' : 'Pin'}</button>
+                    <button onClick={()=>saveUpdate({isDeleted: !data.isDeleted})}>{data.isDeleted ? <><IconLibrary.Delete className="medium-icon" />  Restore</> : <><IconLibrary.Delete className="medium-icon" /> Delete</> }</button>
                     <button onClick={()=>setEditMode(true)}><IconLibrary.Edit className="medium-icon" /> Edit</button>
                 </div> : 
             null}
