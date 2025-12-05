@@ -1,14 +1,13 @@
 import { IconLibrary } from '../../IconLibrary';
 import styles from './Pomodoro.module.css';
 import { useState, useEffect, useRef } from 'react';
-import PomodoroSettings from './PomodoroSettings';
 import { useSelector, useDispatch } from 'react-redux';
-import { addToHistory, deleteSnapshot, saveSnapshot, updateSetting,  } from '../../store/appSettingsSlice';
+import { deleteSnapshot, saveSnapshot, updateSetting,  } from '../../store/appSettingsSlice';
 import MessageModal from '../common/MessageModal';
 import {formatTime} from '../../helpers';
+import { db } from '../../db';
 
 const Pomodoro = () => {
-    const [showSettings, setShowSettings] = useState(false); 
     const dispatch = useDispatch();
     const settings = useSelector(state => state.appSettings.pomodoroSettings); // All pomodoro related settings from the store
     const isMinimized = useSelector(state=>state.appSettings.isPomodoroMinimized);
@@ -178,20 +177,25 @@ const Pomodoro = () => {
         // Gather data about current work session
         const sessionLog = {
             startTime,
-            finishTime: new Date().toISOString(),
+            createdAt: new Date(),
             totalTimeElapsed,
             longBreaks,
             breaks,
             focusSessions,
-            createdAt: new Date()
         };
-        console.log(sessionLog)
-        dispatch(addToHistory(sessionLog));
+        saveLog(sessionLog);
         resetWorkSession();
         sendNotification({type: 'success', msg: 'Work session is done!'})
         setAction('Finished');
         dispatch(deleteSnapshot());
     };
+    const saveLog = async (log) =>{
+        try {
+            await db.logs.add(log);
+        } catch (error) {
+            console.error(error);
+        }
+    }
    
     const sendNotification = (msg) => {
         //show message modal if notifications are enabled or if it's urgent
@@ -214,14 +218,6 @@ const Pomodoro = () => {
         const elapsedTime = totalDurationInSeconds - timeLeft; // Calculate elapsed time
         return ((elapsedTime / totalDurationInSeconds) * 100).toFixed(1); // Calculate percentage of elapsed time and round it to 1 decimal
     };
-
-    const enableSettings = () =>{
-        if(!isActive){
-            setShowSettings(true);
-        }else{
-            sendNotification({type: 'fail', bypassSetting: true, msg: "Can't change setting while work session is active!"})
-        }
-    }
     const formatTimeForMinimizedTimer = (time) => {
         const [minutes, seconds] = time.split(":"); // Splitting MM:SS format
     
@@ -289,7 +285,6 @@ const Pomodoro = () => {
         return (
             <div className={styles.pomodoro} >
                 {message ? <MessageModal data={message} closeModal={()=>setMessage(null)} /> : null}
-                {showSettings && totalTimeElapsed === 0 ? <PomodoroSettings closeSettings={() => setShowSettings(false)} /> : null}
                 {snapshot && totalTimeElapsed < 1 ? <div className={styles.snapshot}>
                     <p>Restore last session?</p>
                     <button onClick={handleRestoreSnapshot}><IconLibrary.Checkmark className='small-icon' /></button>
@@ -297,9 +292,6 @@ const Pomodoro = () => {
                 </div>  : null}
                
                 <div className={styles.timer}>
-                    <button className={styles['settings-button']} onClick={enableSettings}>
-                        <IconLibrary.Settings className='medium-icon' />
-                    </button>
                     {settings.showMinimizeButton ? (
                         <button className={styles['minimize-button']} onClick={()=>handleMinimizeTimer()} >
                             <IconLibrary.Minimize className='medium-icon' />

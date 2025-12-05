@@ -6,3 +6,7 @@ db.version(2).stores({
   tasks: 'id, title, createdAt, isCompleted',
   log: 'createdAt'
 });
+db.version(3).stores({
+  tasks: 'id, title, createdAt, isCompleted',
+  logs: 'createdAt'
+});
