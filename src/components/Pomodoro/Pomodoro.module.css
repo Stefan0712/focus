@@ -1,15 +1,19 @@
 .pomodoro{
-    height: 100vh;
-    width: 100vh;
-    max-width: 100vh;
-    max-height: 100vh;
-    min-width: 100vh;
+    height: 100dvh;
+    width: auto;
+    aspect-ratio: 1 / 1 !important;
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
     padding: 10px;
     position: relative;
+    flex-shrink: 0;
+}
+.pomodoro.zenMode {
+    height: 100dvh !important;
+    width: 100dvw !important;
+    aspect-ratio: unset !important;
 }
 .snapshot{
     position: absolute;
@@ -36,8 +40,7 @@
     justify-content: center;
 }
 
-.minimize-button,
-.settings-button{
+.minimize-button{
     position: absolute;
     top: 15px;
     left: 15px;
@@ -45,11 +48,6 @@
     border: none;
     z-index: 20;
 }
-.settings-button{
-    right: 15px;
-    left: auto;
-}
-
 
 .timer{
     height: calc(100% - 10px);
@@ -60,6 +58,13 @@
     justify-content: center;
     overflow: hidden;
     position: relative;
+}
+.pomodoro.zenMode .timer {
+    aspect-ratio: unset;
+    height: 100%;
+    width: 100%;
+    max-height: 100%;
+    max-width: 100%;
 }
 .timer-background{
     background-color: var(--timer-border-color);
@@ -183,85 +188,6 @@
     
 }
 
-
-
-
-
-
-
-
-/* settings */
-
-.settings{
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    background-color: var(--bg-color);
-    z-index: 50;
-    padding: 10px;
-    animation-name: showPomodoroSettings;
-    animation-duration: 0.1s;
-
-}
-.settings-container{
-    width: 100%;
-    height: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    overflow-y: auto;
-}
-@keyframes showPomodoroSettings {
-    from{
-        right: -100%;
-        opacity: 0;
-    }
-    to{
-        right: 0;
-        opacity: 1;
-    }
-    
-}
-.settings .header{
-    width: 100%;
-    height: 50px;
-    display: flex;
-    align-items: center;
-}
-.settings .header h2{
-    margin-right: auto;
-}
-.settings .header button{
-    background-color: transparent;
-    border: none;
-}
-.setting{
-    width: 100%;
-    height: 50px;
-    min-height: 50px;
-    display: flex;
-    align-items: center;
-    padding: 0 15px;
-    border-bottom: 1px solid var(--settings-divider-color);
-    gap: 20px;
-}
-.setting p{
-    margin-right: auto;
-}
-.setting input,
-.setting option,
-.setting select{
-    width: 50px;
-    height: 30px;
-    border: none;
-    border-radius: 5px;
-    padding-left: 10px;
-    color: black;
-    margin-left: auto;
-}
-
 /* minimized timer */
 
 .minimized-pomodoro{
@@ -347,13 +273,8 @@
 
 @media (orientation: portrait) {
     .pomodoro{
-        height: calc(100vw + 10px);
-        width: 100vw;
-        max-width: 100vw;
-        max-height: calc(100vw + 10px);
-        min-width: 100vw;
-        min-height: calc(100vw + 10px);
-        border-top: 1px solid rgba(211, 211, 211, 0.1);
+        width: 100dvw;
+        height: auto;
     }
     .timer{
         height: 100vw;

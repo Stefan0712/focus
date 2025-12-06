@@ -51,7 +51,7 @@ function App() {
 
   return (
     <div className={`App ${settings.isSwapped ? 'swapped' : ''}`}>
-      <MainPanel />
+      {settings.pomodoroSettings.zenMode ? null : <MainPanel />}
       <Pomodoro />
     </div>
   );

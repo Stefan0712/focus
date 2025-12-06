@@ -3,14 +3,13 @@ import { createSlice } from '@reduxjs/toolkit';
 // Default settings
 const initialState = {
     language: 'en',
-    selectedProject: null,
-    selectedTask: null,
     showFullScreenPrompt: true,
     isFullscreen: false,
     isScreenAwakeOn: false,
     showNotifications: true,
     showFullscreenButton: true,
     pomodoroSettings: {
+        zenMode: false,
         focusDuration: 25,
         breakDuration: 5,
         longBreakDuration: 30,
@@ -24,8 +23,7 @@ const initialState = {
         showMinimizeButton: true,
         showSessionCounter: true,
         showCurrentSession: true,
-        showBottomButtons: true
-
+        showBottomButtons: true,
     },
     snapshot: null,
     theme: 'dark-theme',
@@ -47,23 +45,8 @@ const appSettingsSlice = createSlice({
     name: 'appSettings',
     initialState,
     reducers: {
-        toggleTheme: (state) => {
-            state.theme = state.theme === 'light' ? 'dark' : 'light';
-        },
         setTheme: (state, action) => {
             state.theme = action.payload;
-        },
-        setLanguage: (state, action) => {
-            state.language = action.payload;
-        },
-        setFocusSessions: (state, action)=>{
-            state.focusSessions = action.payload;
-        },
-        setBreakSessions: (state, action)=>{
-            state.breakSessions = action.payload;
-        },
-        updatePomodoroSettings: (state, action)=>{
-            state.pomodoroSettings = action.payload;
         },
         toggleFullscreen: (state, action) =>{
             state.isFullscreen = action.payload
@@ -76,7 +59,6 @@ const appSettingsSlice = createSlice({
             state.pomodoroSettings[property] = value; 
         },
         updateSetting: (state, action) =>{
-            
             const { settingKey, value } = action.payload;
             // Ensure the settingKey is valid 
             if (state.hasOwnProperty(settingKey)) {
@@ -84,13 +66,9 @@ const appSettingsSlice = createSlice({
                 state[settingKey] = value;
             }
         },
-        updatePomodoroSetting: (state, action) =>{
-            const { settingKey, value } = action.payload;
-            console.log(settingKey, value)
-            if (state.pomodoroSettings.hasOwnProperty(settingKey)) {
-                console.log(action.payload)
-                state.pomodoroSettings[settingKey] = value;
-            }
+        setAppSetting: (state, action) => {
+            const { property, value } = action.payload;
+            state[property] = value; 
         },
         saveSnapshot: (state, action) =>{
             const snapshot = action.payload;
@@ -117,5 +95,5 @@ const appSettingsSlice = createSlice({
     }
 });
 
-export const { resetSnapshot, saveSnapshot, setSetting, deleteSnapshot, toggleTheme, setTheme, setLanguage,updatePomodoroSetting, updateSetting, setFocusSessions, toggleScreenAwake, toggleFullscreen, setBreakSessions, resetAppSettings, updatePomodoroSettings } = appSettingsSlice.actions;
+export const { resetSnapshot, saveSnapshot, setSetting, setAppSetting, deleteSnapshot, setTheme, toggleScreenAwake, toggleFullscreen, resetAppSettings, updatePomodoroSettings } = appSettingsSlice.actions;
 export default appSettingsSlice.reducer;

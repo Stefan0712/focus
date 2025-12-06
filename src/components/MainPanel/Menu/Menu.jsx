@@ -3,13 +3,13 @@ import Toggle from '../../common/Toggle';
 import styles from './Menu.module.css';
 import { enterFullScreen, exitFullScreen, isFullscreen } from '../../../helpers.js';
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { toggleScreenAwake } from '../../../store/appSettingsSlice.js';
+import { useDispatch, useSelector } from 'react-redux';
+import { setAppSetting, toggleScreenAwake } from '../../../store/appSettingsSlice.js';
 
 const Menu = ({close, selectScreen}) => {
 
     const dispatch = useDispatch();
-
+    const settings = useSelector((state)=>state.appSettings);
     const [isScreenAwakeOn, setIsScreenAwakeOn] = useState(false);
 
     const toggleIsScreenAwake = () =>{
@@ -32,10 +32,11 @@ const Menu = ({close, selectScreen}) => {
                 <h2>Menu</h2>
                 <button onClick={close}><IconLibrary.Close /></button>
             </div>
-            <button className={styles.menuBtn} onClick={()=>navigateTo('tasks')}>Tasks</button>
-            <button className={styles.menuBtn} onClick={()=>navigateTo('history')}>History</button>
-            <button className={styles.menuBtn} onClick={()=>navigateTo('settings')}>App Settings</button>
-            <button className={styles.menuBtn} onClick={()=>navigateTo('pomodoro-settings')}>Timer Settings</button>
+            <div className={styles.menuSection}>
+                <button className={styles.menuBtn} onClick={()=>navigateTo('tasks')}>Tasks</button>
+                <button className={styles.menuBtn} onClick={()=>navigateTo('history')}>History</button>
+                <button className={styles.menuBtn} onClick={()=>navigateTo('settings')}>Settings</button>
+            </div>
             <div className={styles.quickSettings}>
                 <div className={styles.setting}>
                     <b>Toggle Fullscreen</b>
@@ -45,12 +46,12 @@ const Menu = ({close, selectScreen}) => {
                     <b>Keep Screen Awake</b>
                     <Toggle isActive={isScreenAwakeOn} functionToRun={toggleIsScreenAwake} />
                 </div>
+                <div className={styles.setting}>
+                    <b>Minimize Timer</b>
+                    <Toggle isActive={settings.isPomodoroMinimized} functionToRun={()=>dispatch(setAppSetting({property: 'isPomodoroMinimized', value: !settings.isPomodoroMinimized}))} />
+                </div>
                 {/* <div className={styles.setting}>
                     <b>Maximize Timer</b>
-                    <Toggle />
-                </div>
-                <div className={styles.setting}>
-                    <b>Maximize Main Panel</b>
                     <Toggle />
                 </div> */}
             </div>

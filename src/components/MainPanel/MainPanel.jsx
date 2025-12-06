@@ -6,7 +6,6 @@ import Settings from '../SideMenu/Settings/Settings.jsx';
 import { useSelector } from 'react-redux';
 import { IconLibrary } from '../../IconLibrary';
 import Menu from './Menu/Menu.jsx';
-import PomodoroSettings from '../Pomodoro/PomodoroSettings.jsx';
 
 
 const MainPanel = () => {
@@ -29,7 +28,7 @@ const MainPanel = () => {
                         <IconLibrary.Minimize className='small-icon' />
                     </button> 
                 : null} 
-                {selectedScreen === "tasks" ? <Tasks /> : selectedScreen === "history" ? <History /> : selectedScreen === "settings" ? <Settings /> : selectedScreen==="pomodoro-settings" ? <PomodoroSettings /> : <Tasks />}
+                {selectedScreen === "tasks" ? <Tasks /> : selectedScreen === "history" ? <History /> : selectedScreen === "settings" ? <Settings />  : <Tasks />}
             </div>
         </div>
      ); 

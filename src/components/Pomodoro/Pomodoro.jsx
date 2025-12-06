@@ -2,7 +2,7 @@ import { IconLibrary } from '../../IconLibrary';
 import styles from './Pomodoro.module.css';
 import { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { deleteSnapshot, saveSnapshot, updateSetting,  } from '../../store/appSettingsSlice';
+import { deleteSnapshot, saveSnapshot, setSetting,  } from '../../store/appSettingsSlice';
 import MessageModal from '../common/MessageModal';
 import {formatTime} from '../../helpers';
 import { db } from '../../db';
@@ -228,14 +228,6 @@ const Pomodoro = () => {
             </div>
         );
     };
-    const handleMinimizeTimer = () =>{
-        dispatch(updateSetting({ settingKey: 'isPomodoroMinimized', value: true}));
-        console.log('Minimize Timer function was triggered')
-    }
-    const handleMaximizeTimer = () =>{
-        dispatch(updateSetting({ settingKey: 'isPomodoroMinimized', value: false}))
-        console.log('Maximize Timer function was triggered')
-    }
     
     // Handles saving current progress that can be restored later
     const takeSnapshot = () =>{
@@ -283,7 +275,7 @@ const Pomodoro = () => {
     }
     if(!isMinimized){
         return (
-            <div className={styles.pomodoro} >
+            <div className={`${styles.pomodoro} ${settings.zenMode ? styles.zenMode : ''}`} >
                 {message ? <MessageModal data={message} closeModal={()=>setMessage(null)} /> : null}
                 {snapshot && totalTimeElapsed < 1 ? <div className={styles.snapshot}>
                     <p>Restore last session?</p>
@@ -292,11 +284,7 @@ const Pomodoro = () => {
                 </div>  : null}
                
                 <div className={styles.timer}>
-                    {settings.showMinimizeButton ? (
-                        <button className={styles['minimize-button']} onClick={()=>handleMinimizeTimer()} >
-                            <IconLibrary.Minimize className='medium-icon' />
-                        </button>
-                    ) : null}
+
                     <div className={`${styles['timer-background']} ${isSessionFinished && settings.sessionEndAnimation ? styles['animated-session-end'] : ''}`} style={settings.showTimerRing ? {background: `conic-gradient(var(--accent-color) ${percentageElapsed()}%, var(--timer-border-color) ${percentageElapsed()}% 100%)`} : {background: 'transparent'}}>
                         <div className={styles['timer-content']}>
                             
@@ -312,13 +300,12 @@ const Pomodoro = () => {
                                 <div className={styles.time}>
                                     {formatTime(timeLeft)}
                                 </div>
-                                
                             </div>
                             {settings.showBottomButtons ? (
                                 <div className={`${styles.buttons} ${areButtonsHidden ? styles['minimized-buttons'] : ''}`} >
                                     <div className={`${styles['buttons-container']} ${areButtonsHidden ? 'hide' : ''}`}>
-                                        <button onClick={resetTimer}>
-                                            <IconLibrary.Restart className='medium-icon' />
+                                        <button onClick={()=>setTimeLeft(prev=>prev+60)}>
+                                            <IconLibrary.Plus className='medium-icon' />
                                         </button>
                                         <button onClick={skipSession}>
                                             <IconLibrary.Next className='medium-icon' />
@@ -328,6 +315,9 @@ const Pomodoro = () => {
                                         </button>
                                         <button onClick={handleFinish}>
                                             <IconLibrary.Finish className='medium-icon'  />
+                                        </button>
+                                        <button onClick={()=>dispatch(setSetting({property: 'zenMode', value: !settings.zenMode}))}>
+                                            {settings.zenMode ? <IconLibrary.Minimize className='medium-icon'  /> : <IconLibrary.Maximize className='medium-icon' /> }
                                         </button>
                                         <button onClick={()=>setAreButtonsHidden(true)}>
                                             <IconLibrary.ExpandRight className='small-icon' style={{transform: 'rotateZ(90deg)'}} alt='hide timer buttons' />
@@ -351,9 +341,6 @@ const Pomodoro = () => {
     }else if(isMinimized){
         return (
             <div className={styles['minimized-pomodoro']} style={settings.showMinimizedTimerProgress ? { '--progress': `${percentageElapsed()}%`,} : {background: 'transparent'}}>
-                <button className={styles['maximize-button']} onClick={handleMaximizeTimer}>
-                    <IconLibrary.Maximize className='medium-icon' />
-                </button>
                 <div className={styles.info}>
                     <div className={`${styles.time} ${isSessionFinished ? styles.isFinished : ''}`}>
                         {formatTimeForMinimizedTimer(formatTime(timeLeft))}
