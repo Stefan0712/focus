@@ -348,8 +348,8 @@ const Pomodoro = () => {
                 </div>
 
                 <div className={styles.minimizedButtons}>
-                    <button onClick={resetTimer}>
-                        <IconLibrary.Restart className='medium-icon'  />
+                    <button onClick={()=>setTimeLeft(prev=>prev+60)}>
+                        <IconLibrary.Plus className='medium-icon' />
                     </button>
                     <button onClick={skipSession}>
                         <IconLibrary.Next className='medium-icon' />
