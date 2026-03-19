@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import styles from './History.module.css';
-import {db} from '../../../db';
+import { db } from '../../../db';
 
 const History = () => {
 

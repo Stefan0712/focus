@@ -1,9 +1,9 @@
 import './App.css';
 import MainPanel from './components/MainPanel/MainPanel.jsx';
-import Pomodoro from './components/Pomodoro/Pomodoro.jsx';
+import Pomodoro from './components/Pomodoro/Pomodoro.tsx';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { toggleFullscreen } from './store/appSettingsSlice';
+import { toggleFullscreen } from './store/appSettingsSlice.ts';
 import NoSleep from 'nosleep.js';
 
 

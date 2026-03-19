@@ -4,7 +4,7 @@ import styles from './Menu.module.css';
 import { enterFullScreen, exitFullScreen, isFullscreen } from '../../../helpers.js';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setAppSetting, toggleScreenAwake } from '../../../store/appSettingsSlice.js';
+import { setAppSetting, toggleScreenAwake } from '../../../store/appSettingsSlice.ts';
 
 const Menu = ({close, selectScreen}) => {
 

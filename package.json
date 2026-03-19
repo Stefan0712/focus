@@ -1,12 +1,12 @@
 {
-  "name": "get-it-done",
+  "name": "Focus",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://stefan0712.github.io/get-it-done",
+  "homepage": "https://stefan0712.github.io/focus",
   "dependencies": {
     "@reduxjs/toolkit": "^2.5.1",
     "cra-template": "1.2.0",
-    "dexie": "^4.2.1",
+    "dexie": "^4.3.0",
     "dexie-react-hooks": "^4.2.0",
     "nosleep.js": "^0.12.0",
     "react": "^19.0.0",
@@ -49,6 +49,7 @@
     "@vitejs/plugin-react": "^5.1.1",
     "gh-pages": "^6.3.0",
     "vite": "^7.2.6",
+    "vite-plugin-pwa": "^1.2.0",
     "vite-plugin-svgr": "^4.5.0"
   }
 }

@@ -1,0 +1,21 @@
+.toggleContainer {
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    height: fit-content;
+    width: fit-content;
+    gap: 10px;
+    margin-right: 10px;
+}
+.toggleContainer .btn {
+    background-color: transparent;
+    border: none;
+    width: fit-content;
+    height: fit-content;
+    font-size: 18px;
+    border-bottom: 2px solid transparent;
+    border-radius: 0;
+}
+.toggleContainer .selectedBtn {
+    border-bottom: 2px solid var(--accent-color);
+}

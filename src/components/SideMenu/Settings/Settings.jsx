@@ -2,7 +2,7 @@ import styles from './Settings.module.css';
 import { enterFullScreen, exitFullScreen } from '../../../helpers';
 import { useDispatch, useSelector } from 'react-redux';
 import { resetTasks } from '../../../store/tasksSlice';
-import { resetAppSettings, resetSnapshot, setAppSetting, setSetting, toggleScreenAwake } from '../../../store/appSettingsSlice';
+import { resetAppSettings, resetSnapshot, setAppSetting, setSetting, toggleScreenAwake } from '../../../store/appSettingsSlice.ts';
 import Toggle from '../../common/Toggle';
 import { IconLibrary } from '../../../IconLibrary';
 import { useState } from 'react';
@@ -89,11 +89,11 @@ const Settings = () => {
             <div className={styles.settingsSection}>
                 <b>Timer Settings</b>
                 <div className={styles['setting']}>
-                    <p>Duration of Focus Sessions: (min)</p>
+                    <p>Focus Sessions: (min)</p>
                     <input type='number' min={0} value={timerSettings.focusDuration} onChange={(e)=>updateValue('focusDuration',e.target.value)}></input>
                 </div>
                 <div className={styles['setting']}>
-                    <p>Duration of Break Sessions: (min)</p>
+                    <p>Short Breaks: (min)</p>
                     <input type='number' min={0} value={timerSettings.breakDuration} onChange={(e)=>updateValue('breakDuration', e.target.value)}></input>
                 </div>
                 <div className={styles['setting']}>

@@ -1,11 +1,12 @@
 import styles from './MainPanel.module.css';
 import { useState } from 'react';
-import Tasks from './Tasks/Tasks.jsx';
+import Tasks from './Tasks/Tasks.tsx';
 import History from './History/History.jsx';
 import Settings from '../SideMenu/Settings/Settings.jsx';
 import { useSelector } from 'react-redux';
 import { IconLibrary } from '../../IconLibrary';
 import Menu from './Menu/Menu.jsx';
+import TasksToggle from '../common/TasksToggle.tsx';
 
 
 const MainPanel = () => {
@@ -13,6 +14,7 @@ const MainPanel = () => {
     const isMinimized = useSelector(state=>state.appSettings.isPomodoroMinimized);
     const [isPanelExpanded, setIsPanelExpanded] = useState(false);
     const [showMenu, setShowMenu] = useState(false);
+    const [selectedTasksCategory, setSelectedTasksCategory] = useState('all');
 
 
     return ( 
@@ -21,6 +23,7 @@ const MainPanel = () => {
             <div className={styles.appHeader}>
                 <button onClick={()=>setShowMenu(true)}><IconLibrary.Menu className="medium-icon"/></button>
                 <h3>{selectedScreen === "tasks" ? "Tasks" : selectedScreen === "history" ? "History" : selectedScreen === "settings" ? "Settings" : selectedScreen === "pomodoro-settings" ? " Pomodoro Settings" : null}</h3>
+                {selectedScreen === 'tasks' ? <TasksToggle currentCategory={selectedTasksCategory} selectCategory={(cat)=>setSelectedTasksCategory(cat)} /> : null }
             </div>
             <div className={styles.content}>
                 {isPanelExpanded ?
@@ -28,7 +31,7 @@ const MainPanel = () => {
                         <IconLibrary.Minimize className='small-icon' />
                     </button> 
                 : null} 
-                {selectedScreen === "tasks" ? <Tasks /> : selectedScreen === "history" ? <History /> : selectedScreen === "settings" ? <Settings />  : <Tasks />}
+                {selectedScreen === "tasks" ? <Tasks selectedCategory={selectedTasksCategory} /> : selectedScreen === "history" ? <History /> : selectedScreen === "settings" ? <Settings />  : <Tasks />}
             </div>
         </div>
      ); 

@@ -1,4 +1,4 @@
-# ⏱️ Get It Done
+# ⏱️ Focus
 
 ## 🧐 The Why
 Most productivity apps are productivity traps—too many buttons, ads, and complex settings. Get It Done was built with one philosophy: Friction Reduction. It combines a Pomodoro timer with a prioritized task list in a single view, allowing you to manage your work without breaking your focus. I bulit it to fix one of my biggest issues when working: planning. Instead of spending hours of creating tasks, grouping them, adding tags, deadlines, etc, I just add tasks I want to do this session and hit start on the timer.
@@ -21,7 +21,7 @@ Styling: CSS Modules / Styled Components for storing tasks and logs
 
 1. Clone this repo
 ```bash
-https://github.com/Stefan0712/get-it-done.git
+https://github.com/Stefan0712/focus.git
 ```
 2. Install dependencies
 ```bash

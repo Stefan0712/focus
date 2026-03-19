@@ -1,18 +1,35 @@
 import { IconLibrary } from '../../IconLibrary';
 import styles from './Pomodoro.module.css';
 import { useState, useEffect, useRef } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { deleteSnapshot, saveSnapshot, setSetting,  } from '../../store/appSettingsSlice';
+import { useDispatch } from 'react-redux';
+import { deleteSnapshot, saveSnapshot, setSetting,  } from '../../store/appSettingsSlice.ts';
 import MessageModal from '../common/MessageModal';
 import {formatTime} from '../../helpers';
-import { db } from '../../db';
+import { db, ILog } from '../../db';
+import { useAppSelector } from '../../hooks/hooks';
 
+export interface ISnapshot {
+    savedAt: string;
+    timeLeft: number;
+    currentSession: string;
+    isRunning: boolean;
+    isSessionFinished: boolean;
+    totalTimeElapsed: number;
+    focusSessions: number;
+    breaks: number;
+    longBreaks: number;
+    startTime: string | null;
+    action: string;
+    message: {type: string, msg: string, bypassSetting?: boolean | undefined} | null;
+    isActive: boolean;
+    areButtonsHidden: boolean;
+}
 const Pomodoro = () => {
     const dispatch = useDispatch();
-    const settings = useSelector(state => state.appSettings.pomodoroSettings); // All pomodoro related settings from the store
-    const isMinimized = useSelector(state=>state.appSettings.isPomodoroMinimized);
-    const snapshot = useSelector(state=>state.appSettings.snapshot) || null;
-    const intervalRef  = useRef(); // Ref for the timer interval
+    const settings = useAppSelector(state => state.appSettings.pomodoroSettings); // All pomodoro related settings from the store
+    const isMinimized = useAppSelector(state=>state.appSettings.isPomodoroMinimized);
+    const snapshot: ISnapshot | null = useAppSelector(state=>state.appSettings.snapshot) || null;
+    const intervalRef  = useRef<number | null>(null); // Ref for the timer interval
     const [id, setId] = useState('');
     // Timer states
     const [timeLeft, setTimeLeft] = useState(settings.focusDuration * 60); // Set the initial time left to the duration of the focus session since it's always the first session
@@ -25,9 +42,9 @@ const Pomodoro = () => {
     const [breaks, setBreaks] = useState(0); // Counter for short breaks
     const [longBreaks, setLongBreaks] = useState(0); // Counter for long breaks
 
-    const [startTime, setStartTime] = useState(null);
+    const [startTime, setStartTime] = useState<string | null>(null);
     const [action, setAction] = useState('Not Started');
-    const [message, setMessage] = useState(null); // State for pop-up message
+    const [message, setMessage] = useState<{type: string, msg: string, bypassSetting?: boolean} | null>(null); // State for pop-up message
     const [isActive, setIsActive] = useState(false);
 
     const [areButtonsHidden, setAreButtonsHidden] = useState(false);
@@ -63,7 +80,10 @@ const Pomodoro = () => {
                 setTimeLeft(settings.focusDuration * 60);
             }
             takeSnapshot();
-            clearInterval(intervalRef.current);
+            if (intervalRef.current !== null) {
+                clearInterval(intervalRef.current);
+                intervalRef.current = null;
+            }
             if(settings.autoSkip){
                 startTimer();
             }
@@ -81,10 +101,13 @@ const Pomodoro = () => {
             setAction('Running')
             setIsSessionFinished(false);
             setIsRunning(true);
-            intervalRef.current = setInterval(() => {
+            intervalRef.current = window.setInterval(() => {
             setTimeLeft((prevTime) => {
                 if (prevTime <= 0) {
-                    clearInterval(intervalRef.current); // Stop when time runs out
+                   if (intervalRef.current !== null) {
+                        clearInterval(intervalRef.current);
+                        intervalRef.current = null;
+                    } // Stop when time runs out
                     handleSessionEnd(); // Handle end of session
                     return 0;
                 }
@@ -97,7 +120,10 @@ const Pomodoro = () => {
 
     // Handles pausing the timer
     const pauseTimer = () =>{
-        clearInterval(intervalRef.current);
+        if (intervalRef.current !== null) {
+            clearInterval(intervalRef.current);
+            intervalRef.current = null;
+        }
         setIsRunning(false);
         setAction('Paused');
         takeSnapshot();
@@ -106,7 +132,10 @@ const Pomodoro = () => {
     // Reset the timer by sending a notification and then by setting the time left to whatever current session is and their corresponding values from settings
     const resetTimer = () => {
         sendNotification({type: 'info', msg: 'The timer was reset!'})
-        clearInterval(intervalRef.current);
+        if (intervalRef.current !== null) {
+            clearInterval(intervalRef.current);
+            intervalRef.current = null;
+        }
         setIsSessionFinished(false);
         switch(currentSession){
             case 'focus':
@@ -121,7 +150,7 @@ const Pomodoro = () => {
         }
         setAction('Session Reset')
         setIsRunning(false); // Pause the timer
-        dispatch(deleteSnapshot(id));
+        dispatch(deleteSnapshot());
     };
     
 
@@ -146,7 +175,10 @@ const Pomodoro = () => {
     useEffect(() => {
         return () => {
             // Cleanup interval on component unmount
-            clearInterval(intervalRef.current);
+            if (intervalRef.current !== null) {
+                clearInterval(intervalRef.current);
+                intervalRef.current = null;
+            }
         };
     }, []);
     
@@ -175,7 +207,7 @@ const Pomodoro = () => {
 
     const handleFinish = () => {
         // Gather data about current work session
-        const sessionLog = {
+        const sessionLog: ILog = {
             startTime,
             createdAt: new Date(),
             totalTimeElapsed,
@@ -189,7 +221,7 @@ const Pomodoro = () => {
         setAction('Finished');
         dispatch(deleteSnapshot());
     };
-    const saveLog = async (log) =>{
+    const saveLog = async (log: ILog) =>{
         try {
             await db.logs.add(log);
         } catch (error) {
@@ -197,7 +229,7 @@ const Pomodoro = () => {
         }
     }
    
-    const sendNotification = (msg) => {
+    const sendNotification = (msg: {type: string, msg: string, bypassSetting?: boolean}) => {
         //show message modal if notifications are enabled or if it's urgent
         if (settings.enableNotifications || msg.bypassSetting) {
             setMessage(msg)
@@ -218,7 +250,7 @@ const Pomodoro = () => {
         const elapsedTime = totalDurationInSeconds - timeLeft; // Calculate elapsed time
         return ((elapsedTime / totalDurationInSeconds) * 100).toFixed(1); // Calculate percentage of elapsed time and round it to 1 decimal
     };
-    const formatTimeForMinimizedTimer = (time) => {
+    const formatTimeForMinimizedTimer = (time: string) => {
         const [minutes, seconds] = time.split(":"); // Splitting MM:SS format
     
         return (
@@ -231,7 +263,7 @@ const Pomodoro = () => {
     
     // Handles saving current progress that can be restored later
     const takeSnapshot = () =>{
-        const session = {
+        const session: ISnapshot = {
             savedAt: new Date().toISOString(),
             timeLeft,
             currentSession,
@@ -250,7 +282,7 @@ const Pomodoro = () => {
         dispatch(saveSnapshot(session));
     }
     const handleRestoreSnapshot = () =>{
-        if(snapshot){
+        if(snapshot && snapshot !== null){
             setTimeLeft(snapshot.timeLeft);
             setCurrentSession(snapshot.currentSession);
             setIsRunning(snapshot.isRunning);
@@ -340,28 +372,28 @@ const Pomodoro = () => {
         );
     }else if(isMinimized){
         return (
-            <div className={styles['minimized-pomodoro']} style={settings.showMinimizedTimerProgress ? { '--progress': `${percentageElapsed()}%`,} : {background: 'transparent'}}>
+            <div className={styles['minimized-pomodoro']} style={settings.showMinimizedTimerProgress ? { '--progress': `${percentageElapsed()}%` } as React.CSSProperties : { background: 'transparent' }}>               
                 <div className={styles.info}>
-                    <div className={`${styles.time} ${isSessionFinished ? styles.isFinished : ''}`}>
-                        {formatTimeForMinimizedTimer(formatTime(timeLeft))}
+                        <div className={`${styles.time} ${isSessionFinished ? styles.isFinished : ''}`}>
+                            {formatTimeForMinimizedTimer(formatTime(timeLeft))}
+                        </div>
                     </div>
-                </div>
 
-                <div className={styles.minimizedButtons}>
-                    <button onClick={()=>setTimeLeft(prev=>prev+60)}>
-                        <IconLibrary.Plus className='medium-icon' />
-                    </button>
-                    <button onClick={skipSession}>
-                        <IconLibrary.Next className='medium-icon' />
-                    </button>
-                    <button onClick={isRunning ? pauseTimer : startTimer}>
-                        {isRunning ? <IconLibrary.Pause className='medium-icon' /> : <IconLibrary.Start className='medium-icon' />}
-                    </button>
-                    <button onClick={handleFinish}>
-                        <IconLibrary.Finish className='medium-icon'  />
-                    </button>
-                </div>
-        </div>
+                    <div className={styles.minimizedButtons}>
+                        <button onClick={()=>setTimeLeft(prev=>prev+60)}>
+                            <IconLibrary.Plus className='medium-icon' />
+                        </button>
+                        <button onClick={skipSession}>
+                            <IconLibrary.Next className='medium-icon' />
+                        </button>
+                        <button onClick={isRunning ? pauseTimer : startTimer}>
+                            {isRunning ? <IconLibrary.Pause className='medium-icon' /> : <IconLibrary.Start className='medium-icon' />}
+                        </button>
+                        <button onClick={handleFinish}>
+                            <IconLibrary.Finish className='medium-icon'  />
+                        </button>
+                    </div>
+            </div>
         )
     }
     
