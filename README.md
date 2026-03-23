@@ -62,10 +62,10 @@ Eliminate distractions completely with Maximized and Zen modes, or dive into the
   <img src="screenshots/settings-3.png" width="32%" alt="Settings 3" />
 </p>
 <p align="center">
-  <img src="screenshots/theme-1.png" width="25%" alt="Theme 1" />
-  <img src="screenshots/theme-2.png" width="25%" alt="Theme 2" />
-  <img src="screenshots/theme-3.png" width="25%" alt="Theme 3" />
-  <img src="screenshots/theme-4.png" width="25%" alt="Theme 3" />
+  <img src="screenshots/theme-1.png" width="23%" alt="Theme 1" />
+  <img src="screenshots/theme-2.png" width="23%" alt="Theme 2" />
+  <img src="screenshots/theme-3.png" width="23%" alt="Theme 3" />
+  <img src="screenshots/theme-4.png" width="23%" alt="Theme 4" />
 </p>
 
 ## 🏗️ How It Works Under the Hood
